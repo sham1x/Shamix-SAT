@@ -26,3 +26,11 @@ def test_secret_key_rejects_placeholders_and_defaults():
     # Reject keys shorter than 32 characters
     with pytest.raises(ValidationError):
         Settings(SECRET_KEY="short_key")
+
+def test_health_endpoint(client):
+    resp = client.get("/api/health")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["status"] == "ok"
+    assert data["database"] == "connected"
+

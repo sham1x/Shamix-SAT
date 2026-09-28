@@ -1,10 +1,13 @@
 import os
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
+from sqlalchemy.orm import Session
+from sqlalchemy import text
 from backend.app.config import settings
-from backend.app.database import engine, Base
+from backend.app.database import engine, Base, get_db, SessionLocal
+from backend.app.models import User
 from backend.app.routers import (
     auth, dashboard, lessons, homework, leaderboard, attendance, flashcards, badges
 )
@@ -17,6 +20,25 @@ app = FastAPI(
     description="Full-stack production API and static server for Shamix Prep SAT Platform.",
     version="2.0.0"
 )
+
+@app.on_event("startup")
+def auto_seed_if_empty():
+    db = SessionLocal()
+    try:
+        if db.query(User).count() == 0:
+            from backend.seed import seed_database
+            seed_database()
+    finally:
+        db.close()
+
+# Health check endpoint
+@app.get("/api/health")
+def health_check(db: Session = Depends(get_db)):
+    try:
+        db.execute(text("SELECT 1"))
+        return {"status": "ok", "database": "connected"}
+    except Exception as e:
+        return {"status": "error", "database": str(e)}
 
 # Configure CORS (No wildcard fallback; if ALLOWED_ORIGINS is empty, allow no cross-origin requests)
 origins = [origin.strip() for origin in settings.ALLOWED_ORIGINS.split(",") if origin.strip()]

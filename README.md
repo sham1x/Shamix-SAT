@@ -164,9 +164,50 @@ Open browser at:
 
 ---
 
+## 🌐 Deployment Guidelines
+
+### Health Check Endpoint
+The backend exposes a health check endpoint at `GET /api/health` returning:
+```json
+{
+  "status": "ok",
+  "database": "connected"
+}
+```
+
+### Auto-Seeding
+On server startup, if the database contains 0 users, `seed_database()` automatically initializes default lessons, homework, questions, flashcards, badges, and the demo user account.
+
+### Environment & Port Configuration
+The application reads the `PORT` environment variable (defaults to `8080`):
+```bash
+PORT=8080 uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
+```
+
+### Deployment Options
+1. **Docker Containerization**:
+   ```dockerfile
+   FROM python:3.10-slim
+   WORKDIR /app
+   COPY requirements.txt .
+   RUN pip install --no-cache-dir -r requirements.txt
+   COPY . .
+   EXPOSE 8080
+   CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+   ```
+2. **PaaS (Render / Railway / Fly.io)**:
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT`
+   - Health Check Path: `/api/health`
+3. **Linux / Systemd Service**:
+   Run uvicorn behind Nginx reverse proxy with TLS termination.
+
+---
+
 ## ⚠️ Known Limitations
 
 1. **In-Memory Rate Limiting**: Auth rate limiting uses an in-memory dictionary. In multi-process production deployments, Redis or Memcached should back the rate limiter.
 2. **SQLite Database**: Uses single-file SQLite database suitable for development/demo. Production deployments should migrate to PostgreSQL.
 3. **Demo Video Asset**: Video lessons point to a locally generated 10-second MP4 demo video (`/assets/demo-lesson.mp4`). Production video streaming would use HLS/DASH or Cloud Storage CDN.
 4. **CDN Dependencies**: Frontend uses CDN links for Tailwind CSS, FontAwesome, and Canvas-Confetti with system font fallbacks (`Plus Jakarta Sans`, `system-ui`) and native font icon fallback labels.
+

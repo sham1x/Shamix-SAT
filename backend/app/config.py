@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
     DATABASE_URL: str = "sqlite:///./backend/data/shamix.db"
     ALLOWED_ORIGINS: str = "http://localhost:8080,http://127.0.0.1:8080"
+    PORT: int = 8080
 
     model_config = SettingsConfigDict(
         env_file=".env",

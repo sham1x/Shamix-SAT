@@ -623,7 +623,7 @@ async function openLessonModal(lessonId) {
             Your browser does not support HTML5 video.
           </video>
         </div>
-        <p class="text-[11px] text-cyan-400 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-circle-info text-cyan-400"></i> Demo Video — Official SAT Masterclass Content</p>
+        <p class="text-[11px] text-cyan-400 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-circle-info text-cyan-400"></i> Demo video (placeholder)</p>
 
         <p class="text-xs text-slate-300 leading-relaxed">${escapeHtml(les.description)}</p>
 
