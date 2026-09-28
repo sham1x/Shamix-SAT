@@ -495,21 +495,21 @@
   </div>
 
   <!-- LESSON DETAIL MODAL -->
-  <div id="lesson-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-3 sm:p-6 overflow-y-auto">
-    <div class="bg-[#0D1322] border border-slate-800 w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
-      <div class="p-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <span id="lesson-modal-subject" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">MATH</span>
-          <div>
-            <h3 id="lesson-modal-title" class="font-bold text-sm sm:text-base text-white font-heading">Lesson Title</h3>
-            <p id="lesson-modal-module" class="text-xs text-slate-400">Module</p>
+  <div id="lesson-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-2 sm:p-6 overflow-y-auto">
+    <div class="bg-[#0D1322] border border-slate-800 w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] sm:max-h-[92vh] overflow-hidden my-auto">
+      <div class="p-3 sm:p-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between gap-2 shrink-0">
+        <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+          <span id="lesson-modal-subject" class="px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-bold rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30 shrink-0">MATH</span>
+          <div class="min-w-0 flex-1">
+            <h3 id="lesson-modal-title" class="font-bold text-xs sm:text-base text-white font-heading truncate">Lesson Title</h3>
+            <p id="lesson-modal-module" class="text-[10px] sm:text-xs text-slate-400 truncate">Module</p>
           </div>
         </div>
-        <button onclick="closeLessonModal()" aria-label="Close Lesson" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800">
-          <i class="fa-solid fa-xmark text-lg"></i>
+        <button onclick="closeLessonModal()" aria-label="Close Lesson" class="text-slate-400 hover:text-white p-1.5 sm:p-2 rounded-lg hover:bg-slate-800 shrink-0">
+          <i class="fa-solid fa-xmark text-base sm:text-lg"></i>
         </button>
       </div>
-      <div id="lesson-modal-content" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+      <div id="lesson-modal-content" class="flex-1 overflow-y-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
         <!-- Rendered by app.js -->
       </div>
     </div>

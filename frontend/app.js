@@ -615,21 +615,21 @@ async function openLessonModal(lessonId) {
     `).join("");
 
     modalContent.innerHTML = `
-      <div class="space-y-6">
+      <div class="space-y-4 sm:space-y-6">
         <!-- Video Player -->
-        <div class="aspect-video bg-black rounded-2xl overflow-hidden border border-slate-800 relative">
-          <video id="lesson-video-player" controls class="w-full h-full object-cover">
+        <div class="aspect-video bg-black rounded-xl sm:rounded-2xl overflow-hidden border border-slate-800 relative w-full shadow-lg">
+          <video id="lesson-video-player" controls class="w-full h-full object-contain bg-black">
             <source src="${escapeHtml(les.videoUrl)}" type="video/mp4">
             Your browser does not support HTML5 video.
           </video>
         </div>
-        <p class="text-[11px] text-cyan-400 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-circle-info text-cyan-400"></i> Demo video (placeholder)</p>
+        <p class="text-[10px] sm:text-[11px] text-cyan-400 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-circle-info text-cyan-400"></i> Demo video (placeholder)</p>
 
         <p class="text-xs text-slate-300 leading-relaxed">${escapeHtml(les.description)}</p>
 
         <!-- Key Takeaways -->
-        <div class="glass-panel p-4 sm:p-5 rounded-2xl border border-slate-800 space-y-2">
-          <h4 class="font-bold text-xs uppercase tracking-wider text-purple-400 flex items-center gap-1.5">
+        <div class="glass-panel p-3 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-800 space-y-2">
+          <h4 class="font-bold text-[11px] sm:text-xs uppercase tracking-wider text-purple-400 flex items-center gap-1.5">
             <i class="fa-solid fa-key"></i> Key SAT Takeaways
           </h4>
           <ul class="space-y-1.5 text-xs text-slate-200">
@@ -639,16 +639,16 @@ async function openLessonModal(lessonId) {
 
         <!-- Transcript -->
         <div class="space-y-2">
-          <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400">Lesson Transcript</h4>
-          <div class="space-y-2 max-h-48 overflow-y-auto pr-1">
+          <h4 class="font-bold text-[11px] sm:text-xs uppercase tracking-wider text-slate-400">Lesson Transcript</h4>
+          <div class="space-y-2 max-h-40 sm:max-h-48 overflow-y-auto pr-1">
             ${transcriptHtml}
           </div>
         </div>
 
         <!-- Go to Related Homework Link -->
         ${les.relatedHomeworkId ? `
-          <div class="pt-2">
-            <button onclick="closeLessonModal(); startQuiz('${les.relatedHomeworkId}')" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-cyan-600/30">
+          <div class="pt-2 pb-4 sm:pb-0">
+            <button onclick="closeLessonModal(); startQuiz('${les.relatedHomeworkId}')" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-2.5 sm:py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-cyan-600/30 active:scale-[0.98] transition-all">
               <i class="fa-solid fa-pencil"></i> Go to Practice Homework Drill
             </button>
           </div>
