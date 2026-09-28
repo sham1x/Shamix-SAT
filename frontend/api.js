@@ -79,7 +79,7 @@ const ShamixApi = {
       }
 
       return await response.json();
-    }, catch (error) {
+    } catch (error) {
       clearTimeout(timeoutId);
       if (error.name === "AbortError") {
         throw new Error("Network request timed out. Please check your connection and try again.");
