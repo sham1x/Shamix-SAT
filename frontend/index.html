@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shamix Prep SAT — Master the SAT. Reach Your Peak.</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              dark: '#090D16',
+              card: 'rgba(17, 24, 39, 0.7)',
+              purple: '#8B5CF6',
+              cyan: '#06B6D4',
+              amber: '#F59E0B',
+              rose: '#F43F5E',
+              emerald: '#10B981',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-[#090D16] text-slate-100 min-h-screen flex flex-col selection:bg-purple-500 selection:text-white">
+
+  <!-- AUTHENTICATION VIEW (Shown when logged out) -->
+  <div id="view-auth" class="min-h-screen w-full flex items-center justify-center p-4 bg-gradient-to-br from-[#090D16] via-[#0F172A] to-[#1E1B4B]">
+    <div class="max-w-md w-full glass-panel-glow rounded-3xl p-6 sm:p-8 border border-purple-500/30 shadow-2xl relative overflow-hidden">
+      <div class="absolute -top-16 -right-16 w-40 h-40 bg-purple-600/20 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-16 -left-16 w-40 h-40 bg-cyan-600/20 rounded-full blur-3xl"></div>
+
+      <!-- Auth Header -->
+      <div class="text-center space-y-3 mb-6 relative z-10">
+        <div class="inline-block relative">
+          <svg class="w-16 h-16 rounded-2xl ring-4 ring-purple-500/50 shadow-xl shadow-purple-500/20 mx-auto float-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="shamix-logo-grad-auth" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#8B5CF6" />
+                <stop offset="100%" stop-color="#06B6D4" />
+              </linearGradient>
+            </defs>
+            <rect width="100" height="100" rx="24" fill="url(#shamix-logo-grad-auth)" />
+            <path d="M 62 34 C 62 26, 38 24, 38 36 C 38 48, 62 48, 62 62 C 62 76, 36 74, 36 66" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" />
+            <path d="M 68 22 L 73 14 L 78 22 L 86 27 L 78 32 L 73 40 L 68 32 L 60 27 Z" fill="#FDE047" />
+          </svg>
+        </div>
+        <h1 class="font-extrabold text-2xl tracking-tight font-heading bg-gradient-to-r from-purple-400 via-cyan-400 to-amber-300 bg-clip-text text-transparent">SHAMIX<span class="text-white"> PREP</span></h1>
+        <p class="text-xs text-slate-400">Master the Digital SAT. Reach Your 1500+ Peak.</p>
+      </div>
+
+      <!-- Auth Tab Switcher -->
+      <div class="flex rounded-xl bg-slate-900/80 p-1 border border-slate-800 mb-6">
+        <button id="auth-tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2 rounded-lg text-xs font-bold transition-all bg-purple-600 text-white shadow-md">Sign In</button>
+        <button id="auth-tab-register" onclick="switchAuthTab('register')" class="flex-1 py-2 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white">Create Account</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="form-login" onsubmit="handleLoginSubmit(event)" class="space-y-4">
+        <div id="login-error-container" class="hidden p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
+          <i class="fa-solid fa-triangle-exclamation text-rose-400"></i>
+          <span id="login-error-text">Invalid username or password</span>
+        </div>
+
+        <div class="space-y-1">
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">Username</label>
+          <div class="relative">
+            <i class="fa-solid fa-user absolute left-3 top-3.5 text-slate-500 text-xs"></i>
+            <input type="text" id="login-username" required placeholder="Enter your username" class="w-full bg-slate-900/90 border border-slate-700/80 focus:border-purple-500 rounded-xl pl-9 pr-3 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-all">
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">Password</label>
+          <div class="relative">
+            <i class="fa-solid fa-lock absolute left-3 top-3.5 text-slate-500 text-xs"></i>
+            <input type="password" id="login-password" required placeholder="Enter your password" class="w-full bg-slate-900/90 border border-slate-700/80 focus:border-purple-500 rounded-xl pl-9 pr-10 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-all">
+            <button type="button" onclick="togglePasswordVisibility('login-password', 'login-pw-icon')" class="absolute right-3 top-2.5 text-slate-500 hover:text-slate-300 p-1" aria-label="Toggle password visibility">
+              <i id="login-pw-icon" class="fa-solid fa-eye text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" id="login-submit-btn" class="w-full mt-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition-all active:scale-[0.99] disabled:opacity-50">
+          <span>Sign In</span>
+          <i class="fa-solid fa-arrow-right text-xs"></i>
+        </button>
+
+        <div class="pt-2 text-center">
+          <button type="button" onclick="fillDemoAccount()" class="text-xs text-cyan-400 hover:text-cyan-300 font-semibold underline underline-offset-4 flex items-center justify-center gap-1.5 mx-auto">
+            <i class="fa-solid fa-bolt text-amber-400"></i> Try Demo Account (demo / Demo12345!)
+          </button>
+        </div>
+      </form>
+
+      <!-- REGISTER FORM -->
+      <form id="form-register" onsubmit="handleRegisterSubmit(event)" class="space-y-3 hidden">
+        <div id="reg-error-container" class="hidden p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
+          <i class="fa-solid fa-triangle-exclamation text-rose-400"></i>
+          <span id="reg-error-text">Registration error</span>
+        </div>
+
+        <div class="space-y-1">
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">Username (3+ characters)</label>
+          <input type="text" id="reg-username" required minlength="3" placeholder="Choose a username" class="w-full bg-slate-900/90 border border-slate-700/80 focus:border-purple-500 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+        </div>
+
+        <div class="space-y-1">
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">Email Address</label>
+          <input type="email" id="reg-email" required placeholder="student@example.com" class="w-full bg-slate-900/90 border border-slate-700/80 focus:border-purple-500 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+        </div>
+
+        <div class="space-y-1">
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">Display Name (Optional)</label>
+          <input type="text" id="reg-displayname" placeholder="Alex Stargazer" class="w-full bg-slate-900/90 border border-slate-700/80 focus:border-purple-500 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+        </div>
+
+        <div class="space-y-1">
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">Password (8+ characters)</label>
+          <div class="relative">
+            <input type="password" id="reg-password" required minlength="8" placeholder="Create a strong password" class="w-full bg-slate-900/90 border border-slate-700/80 focus:border-purple-500 rounded-xl pl-3 pr-10 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-purple-500">
+            <button type="button" onclick="togglePasswordVisibility('reg-password', 'reg-pw-icon')" class="absolute right-3 top-2 text-slate-500 hover:text-slate-300 p-1" aria-label="Toggle password visibility">
+              <i id="reg-pw-icon" class="fa-solid fa-eye text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" id="reg-submit-btn" class="w-full mt-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-cyan-600/30 transition-all active:scale-[0.99] disabled:opacity-50">
+          <span>Create Account & Start Learning</span>
+          <i class="fa-solid fa-user-plus text-xs"></i>
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- APPLICATION CONTAINER (Shown when logged in) -->
+  <div id="app-container" class="flex-1 flex flex-col hidden">
+
+    <!-- TOP NAVIGATION HEADER -->
+    <header class="sticky top-0 z-40 bg-[#0B0F19]/90 backdrop-blur-md border-b border-slate-800/80 px-4 lg:px-8 py-3">
+      <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+        
+        <!-- Brand Logo & Name -->
+        <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('dashboard')">
+          <div class="relative group">
+            <!-- Monogram SVG Logo -->
+            <svg class="w-11 h-11 rounded-xl ring-2 ring-purple-500/50 group-hover:ring-purple-400 transition-all shadow-lg shadow-purple-500/20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="shamix-logo-grad-header" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#8B5CF6" />
+                  <stop offset="100%" stop-color="#06B6D4" />
+                </linearGradient>
+              </defs>
+              <rect width="100" height="100" rx="24" fill="url(#shamix-logo-grad-header)" />
+              <path d="M 62 34 C 62 26, 38 24, 38 36 C 38 48, 62 48, 62 62 C 62 76, 36 74, 36 66" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" />
+              <path d="M 68 22 L 73 14 L 78 22 L 86 27 L 78 32 L 73 40 L 68 32 L 60 27 Z" fill="#FDE047" />
+            </svg>
+            <span class="absolute -top-1 -right-1 flex h-3 w-3">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+            </span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-extrabold text-xl tracking-tight font-heading bg-gradient-to-r from-purple-400 via-cyan-400 to-amber-300 bg-clip-text text-transparent">SHAMIX<span class="text-white"> PREP</span></span>
+              <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-full">SAT PREP</span>
+            </div>
+            <p class="text-xs text-slate-400 font-medium hidden sm:block">Gamified SAT Mastery</p>
+          </div>
+        </div>
+
+        <!-- SAT Countdown Banner (Header Widget) -->
+        <div id="header-countdown" class="hidden md:flex items-center gap-3 bg-slate-900/80 border border-purple-500/30 px-4 py-1.5 rounded-xl shadow-inner cursor-pointer hover:border-purple-400 transition-all" onclick="openCountdownModal()">
+          <i class="fa-solid fa-hourglass-half text-purple-400 animate-spin" style="animation-duration: 10s;"></i>
+          <div class="text-xs">
+            <div class="text-slate-400 font-medium text-[10px] uppercase tracking-wider">Test Day Countdown</div>
+            <div id="header-countdown-timer" class="font-mono font-bold text-slate-200 tracking-wide text-xs">
+              Calculating...
+            </div>
+          </div>
+          <span id="header-target-label" class="text-[10px] text-purple-400 bg-purple-950/60 px-2 py-0.5 rounded border border-purple-500/30 font-semibold">Test Day</span>
+        </div>
+
+        <!-- Gamification Stats Header Items & User Menu -->
+        <div class="flex items-center gap-2 sm:gap-4">
+          
+          <!-- Daily Streak -->
+          <div id="streak-pill" class="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-400 px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm shadow-sm cursor-pointer hover:bg-amber-500/20 transition-all" title="Current Daily Streak">
+            <i class="fa-solid fa-fire text-amber-400 animate-bounce"></i>
+            <span id="streak-count">0</span> <span class="hidden sm:inline">Days</span>
+          </div>
+
+          <!-- Stardust XP -->
+          <div class="flex items-center gap-1.5 bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm shadow-sm">
+            <i class="fa-solid fa-gem text-cyan-400"></i>
+            <span id="xp-count">0</span> <span class="text-[10px] text-cyan-400 uppercase hidden sm:inline">XP</span>
+          </div>
+
+          <!-- Level Badge -->
+          <div class="hidden lg:flex items-center gap-1.5 bg-purple-500/10 border border-purple-500/30 text-purple-300 px-3 py-1.5 rounded-xl font-bold text-xs">
+            <i class="fa-solid fa-star text-amber-400"></i>
+            <span>Lvl <span id="user-level">1</span></span>
+          </div>
+
+          <!-- AI Tutor Toggle Button -->
+          <button onclick="toggleCoachChat()" aria-label="Ask Coach AI Tutor" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white p-2 sm:px-3 sm:py-1.5 rounded-xl font-semibold text-xs flex items-center gap-2 shadow-lg shadow-purple-600/30 transition-all transform active:scale-95">
+            <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i>
+            <span class="hidden sm:inline">Ask Coach</span>
+          </button>
+
+          <!-- User Menu & Logout Dropdown -->
+          <div class="relative group">
+            <button id="user-menu-btn" onclick="toggleUserDropdown()" aria-label="User Account Menu" class="flex items-center gap-2 bg-slate-900 border border-slate-700/80 p-1.5 rounded-xl hover:border-slate-500 transition-all">
+              <div id="header-avatar-container">
+                <div class="w-7 h-7 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold text-xs">U</div>
+              </div>
+              <span id="header-username" class="text-xs font-semibold text-slate-200 hidden xl:inline">Student</span>
+              <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+            </button>
+
+            <!-- User Dropdown Menu -->
+            <div id="user-dropdown-menu" class="hidden absolute right-0 mt-2 w-48 bg-[#0E1526] border border-slate-800 rounded-2xl shadow-2xl p-2 z-50 space-y-1">
+              <div class="px-3 py-2 border-b border-slate-800">
+                <div id="dropdown-user-name" class="font-bold text-xs text-white truncate">Student</div>
+                <div id="dropdown-user-email" class="text-[10px] text-slate-400 truncate">student@shamixprep.sat</div>
+              </div>
+              <button onclick="openCountdownModal(); toggleUserDropdown();" class="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 rounded-xl flex items-center gap-2">
+                <i class="fa-solid fa-calendar text-purple-400"></i> Target Test Date
+              </button>
+              <button onclick="handleLogout()" class="w-full text-left px-3 py-2 text-xs text-rose-400 hover:bg-rose-500/10 rounded-xl flex items-center gap-2 font-semibold">
+                <i class="fa-solid fa-right-from-bracket text-rose-400"></i> Sign Out
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </header>
+
+    <!-- MAIN WRAPPER (SIDEBAR + CONTENT) -->
+    <div class="flex-1 flex max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 gap-6">
+
+      <!-- DESKTOP SIDEBAR NAVIGATION -->
+      <aside class="w-64 shrink-0 hidden md:block">
+        <div class="sticky top-20 flex flex-col gap-4">
+
+          <!-- Navigation Links -->
+          <div class="glass-panel rounded-2xl p-3 border border-slate-800 flex flex-col gap-1">
+            <button onclick="navigateTo('dashboard')" id="nav-dashboard" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all text-purple-400 bg-purple-500/10 border border-purple-500/20">
+              <i class="fa-solid fa-compass w-5 text-center text-lg"></i>
+              <span>Dashboard</span>
+            </button>
+            
+            <button onclick="navigateTo('lessons')" id="nav-lessons" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all text-slate-400 hover:text-slate-100 hover:bg-slate-800/50">
+              <i class="fa-solid fa-play-circle w-5 text-center text-lg"></i>
+              <span>Video Lessons</span>
+            </button>
+
+            <button onclick="navigateTo('homework')" id="nav-homework" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all text-slate-400 hover:text-slate-100 hover:bg-slate-800/50">
+              <i class="fa-solid fa-clipboard-check w-5 text-center text-lg"></i>
+              <span>Homework Hub</span>
+            </button>
+
+            <button onclick="navigateTo('leaderboard')" id="nav-leaderboard" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all text-slate-400 hover:text-slate-100 hover:bg-slate-800/50">
+              <i class="fa-solid fa-trophy w-5 text-center text-lg"></i>
+              <span>Leaderboard</span>
+            </button>
+
+            <button onclick="navigateTo('attendance')" id="nav-attendance" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all text-slate-400 hover:text-slate-100 hover:bg-slate-800/50">
+              <i class="fa-solid fa-calendar-days w-5 text-center text-lg"></i>
+              <span>Attendance & Check-in</span>
+            </button>
+
+            <button onclick="navigateTo('flashcards')" id="nav-flashcards" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all text-slate-400 hover:text-slate-100 hover:bg-slate-800/50">
+              <i class="fa-solid fa-layer-group w-5 text-center text-lg"></i>
+              <span>Formula & Vocab</span>
+            </button>
+
+            <button onclick="navigateTo('badges')" id="nav-badges" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all text-slate-400 hover:text-slate-100 hover:bg-slate-800/50">
+              <i class="fa-solid fa-award w-5 text-center text-lg"></i>
+              <span>Badges</span>
+            </button>
+          </div>
+
+          <!-- COACH CARD IN SIDEBAR -->
+          <div class="glass-panel-glow rounded-2xl p-4 relative overflow-hidden text-center flex flex-col items-center">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-purple-600/20 rounded-full blur-2xl"></div>
+            <svg class="w-20 h-20 rounded-2xl mb-2 float-logo shadow-xl border-2 border-cyan-400/40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="shamix-logo-grad-sidebar" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#8B5CF6" />
+                  <stop offset="100%" stop-color="#06B6D4" />
+                </linearGradient>
+              </defs>
+              <rect width="100" height="100" rx="24" fill="url(#shamix-logo-grad-sidebar)" />
+              <path d="M 62 34 C 62 26, 38 24, 38 36 C 38 48, 62 48, 62 62 C 62 76, 36 74, 36 66" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" />
+              <path d="M 68 22 L 73 14 L 78 22 L 86 27 L 78 32 L 73 40 L 68 32 L 60 27 Z" fill="#FDE047" />
+            </svg>
+            <h4 class="font-bold text-sm text-slate-100 font-heading">Shamix AI Coach</h4>
+            <p class="text-xs text-slate-400 mt-1">"Keep your study streak active today!"</p>
+            <button onclick="checkInToday()" id="sidebar-checkin-btn" class="mt-3 w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-2 shadow-md shadow-cyan-500/20 transition-all">
+              <i class="fa-solid fa-calendar-check"></i>
+              <span>Daily Check-In (+50 XP)</span>
+            </button>
+          </div>
+
+        </div>
+      </aside>
+
+      <!-- MOBILE BOTTOM NAVIGATION (Visible on small screens) -->
+      <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0B0F19]/95 backdrop-blur-lg border-t border-slate-800 px-2 py-2 flex items-center justify-around">
+        <button onclick="navigateTo('dashboard')" id="mobile-nav-dashboard" aria-label="Dashboard" class="mobile-nav-item flex flex-col items-center gap-1 text-purple-400 text-xs font-medium">
+          <i class="fa-solid fa-compass text-lg"></i>
+          <span>Home</span>
+        </button>
+        <button onclick="navigateTo('lessons')" id="mobile-nav-lessons" aria-label="Lessons" class="mobile-nav-item flex flex-col items-center gap-1 text-slate-400 text-xs font-medium">
+          <i class="fa-solid fa-play-circle text-lg"></i>
+          <span>Lessons</span>
+        </button>
+        <button onclick="navigateTo('homework')" id="mobile-nav-homework" aria-label="Homework" class="mobile-nav-item flex flex-col items-center gap-1 text-slate-400 text-xs font-medium relative">
+          <i class="fa-solid fa-clipboard-check text-lg"></i>
+          <span>Homework</span>
+        </button>
+        <button onclick="navigateTo('leaderboard')" id="mobile-nav-leaderboard" aria-label="Leaderboard" class="mobile-nav-item flex flex-col items-center gap-1 text-slate-400 text-xs font-medium">
+          <i class="fa-solid fa-trophy text-lg"></i>
+          <span>Rank</span>
+        </button>
+        <button onclick="navigateTo('attendance')" id="mobile-nav-attendance" aria-label="Attendance" class="mobile-nav-item flex flex-col items-center gap-1 text-slate-400 text-xs font-medium">
+          <i class="fa-solid fa-calendar-days text-lg"></i>
+          <span>Attend</span>
+        </button>
+      </nav>
+
+      <!-- DYNAMIC MAIN CONTENT VIEW AREA -->
+      <main id="main-content" class="flex-1 w-full pb-20 md:pb-6">
+        <!-- Dynamic Views rendered by app.js -->
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- COACH AI TUTOR SLIDE-OVER DRAWER -->
+  <div id="coach-chat-drawer" class="fixed inset-y-0 right-0 z-50 w-full sm:w-96 bg-[#0E1526] border-l border-slate-800 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+    <!-- Chat Header -->
+    <div class="p-4 bg-[#131B2E] border-b border-slate-800 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <svg class="w-10 h-10 rounded-xl ring-2 ring-cyan-400/50" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="shamix-logo-grad-drawer" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#8B5CF6" />
+              <stop offset="100%" stop-color="#06B6D4" />
+            </linearGradient>
+          </defs>
+          <rect width="100" height="100" rx="24" fill="url(#shamix-logo-grad-drawer)" />
+          <path d="M 62 34 C 62 26, 38 24, 38 36 C 38 48, 62 48, 62 62 C 62 76, 36 74, 36 66" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" />
+          <path d="M 68 22 L 73 14 L 78 22 L 86 27 L 78 32 L 73 40 L 68 32 L 60 27 Z" fill="#FDE047" />
+        </svg>
+        <div>
+          <h3 class="font-bold text-sm text-slate-100 font-heading">Shamix AI Coach</h3>
+          <p class="text-[11px] text-cyan-400 flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Online • Ready to solve
+          </p>
+        </div>
+      </div>
+      <button onclick="toggleCoachChat()" aria-label="Close Coach Chat" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+    </div>
+
+    <!-- Chat Messages -->
+    <div id="coach-chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
+      <div class="flex gap-2.5 items-start">
+        <svg class="w-7 h-7 rounded-lg shrink-0" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100" height="100" rx="24" fill="url(#shamix-logo-grad-drawer)" />
+          <path d="M 62 34 C 62 26, 38 24, 38 36 C 38 48, 62 48, 62 62 C 62 76, 36 74, 36 66" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" />
+          <path d="M 68 22 L 73 14 L 78 22 L 86 27 L 78 32 L 73 40 L 68 32 L 60 27 Z" fill="#FDE047" />
+        </svg>
+        <div class="bg-slate-800/90 text-slate-200 p-3 rounded-2xl rounded-tl-none border border-slate-700/60 max-w-[85%] leading-relaxed">
+          Welcome to Shamix Prep! I'm Coach, your AI SAT Coach. Ask me anything about SAT Math formulas, Reading strategies, grammar rules, or request a quick quiz practice!
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Prompts -->
+    <div class="px-4 py-2 bg-slate-900/60 border-t border-slate-800/60 flex items-center gap-1.5 overflow-x-auto whitespace-nowrap text-[11px]">
+      <button onclick="sendQuickPrompt('Explain Quadratic Formula trick')" class="bg-slate-800 hover:bg-slate-700 text-purple-300 px-2.5 py-1 rounded-full border border-purple-500/30">
+        📐 Quadratic trick
+      </button>
+      <button onclick="sendQuickPrompt('Give me a Reading tip')" class="bg-slate-800 hover:bg-slate-700 text-cyan-300 px-2.5 py-1 rounded-full border border-cyan-500/30">
+        📖 Reading strategy
+      </button>
+      <button onclick="sendQuickPrompt('What is the SAT 1500+ score goal?')" class="bg-slate-800 hover:bg-slate-700 text-amber-300 px-2.5 py-1 rounded-full border border-amber-500/30">
+        🎯 1500+ Target
+      </button>
+    </div>
+
+    <!-- Chat Input Form -->
+    <form onsubmit="handleCoachSubmit(event)" class="p-3 bg-[#131B2E] border-t border-slate-800 flex items-center gap-2">
+      <input type="text" id="coach-input" placeholder="Ask Coach a question..." class="flex-1 bg-slate-900 border border-slate-700 focus:border-purple-500 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none">
+      <button type="submit" aria-label="Send message" class="bg-purple-600 hover:bg-purple-500 text-white p-2 px-3 rounded-xl text-xs font-semibold shadow-md shadow-purple-600/30">
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
+    </form>
+  </div>
+
+  <!-- HOMEWORK QUIZ RUNNER MODAL -->
+  <div id="quiz-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="bg-[#0D1322] border border-slate-800 w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
+      
+      <!-- Quiz Header -->
+      <div class="p-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span id="quiz-subject-badge" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">SAT MATH</span>
+          <div>
+            <h3 id="quiz-title" class="font-bold text-sm sm:text-base text-white font-heading">Practice Drill</h3>
+            <p class="text-xs text-slate-400">Question <span id="quiz-current-num">1</span> of <span id="quiz-total-num">1</span></p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <!-- Graphing Calculator Button -->
+          <button onclick="toggleGraphingCalc()" class="bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/30 px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5">
+            <i class="fa-solid fa-calculator"></i>
+            <span class="hidden sm:inline">Graphing Calc</span>
+          </button>
+          
+          <!-- Close Modal -->
+          <button onclick="closeQuizModal()" aria-label="Close Quiz" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quiz Body Container -->
+      <div class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+        
+        <!-- Question Stem & Context -->
+        <div class="glass-panel p-4 sm:p-5 rounded-2xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span class="font-semibold text-cyan-400" id="quiz-topic">Skill</span>
+            <span>Difficulty: <span class="text-amber-400 font-bold" id="quiz-difficulty">Medium ⭐⭐</span></span>
+          </div>
+          <div id="quiz-question-text" class="text-slate-100 text-sm sm:text-base font-medium leading-relaxed">
+            Loading question...
+          </div>
+        </div>
+
+        <!-- Options Grid -->
+        <div id="quiz-options-container" class="space-y-3">
+          <!-- Dynamic options generated by JS -->
+        </div>
+
+        <!-- Explanation Breakdown Box (shown after answering) -->
+        <div id="quiz-explanation-box" class="hidden glass-panel-glow p-4 rounded-2xl border border-emerald-500/30 bg-emerald-950/20 space-y-2">
+          <div class="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase tracking-wider">
+            <i class="fa-solid fa-lightbulb text-amber-300"></i> Coach's Solution Breakdown
+          </div>
+          <p id="quiz-explanation-text" class="text-xs text-slate-300 leading-relaxed">
+            Explanation will be shown here.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Quiz Footer Controls -->
+      <div class="p-4 bg-slate-900 border-t border-slate-800 flex items-center justify-between">
+        <button id="quiz-prev-btn" onclick="prevQuizQuestion()" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold disabled:opacity-40" disabled>
+          <i class="fa-solid fa-arrow-left mr-1"></i> Previous
+        </button>
+
+        <button id="quiz-action-btn" onclick="handleQuizAction()" class="px-6 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold shadow-lg shadow-purple-600/30">
+          Submit Answer
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LESSON DETAIL MODAL -->
+  <div id="lesson-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="bg-[#0D1322] border border-slate-800 w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
+      <div class="p-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span id="lesson-modal-subject" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">MATH</span>
+          <div>
+            <h3 id="lesson-modal-title" class="font-bold text-sm sm:text-base text-white font-heading">Lesson Title</h3>
+            <p id="lesson-modal-module" class="text-xs text-slate-400">Module</p>
+          </div>
+        </div>
+        <button onclick="closeLessonModal()" aria-label="Close Lesson" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <div id="lesson-modal-content" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+        <!-- Rendered by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- GRAPHING CALCULATOR MODAL -->
+  <div id="graphing-calc-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-2xl rounded-2xl shadow-2xl p-4 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-sm text-cyan-400 flex items-center gap-2">
+          <i class="fa-solid fa-calculator"></i> Digital SAT Graphing Calculator Simulator
+        </h3>
+        <button onclick="toggleGraphingCalc()" aria-label="Close Graphing Calculator" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <div class="calc-screen p-4 rounded-xl border border-slate-700 font-mono text-xs text-green-400 space-y-2">
+        <div class="text-slate-400 text-[10px]">f(x) = 2x² - 4x + 3</div>
+        <div class="text-cyan-300">Vertex: (1, 1) | Y-intercept: (0, 3)</div>
+        <div class="h-40 bg-slate-950 rounded border border-slate-800 flex items-center justify-center relative overflow-hidden">
+          <div class="absolute inset-0 bg-grid-slate-800/50"></div>
+          <svg class="w-full h-full text-cyan-400" viewBox="0 0 200 100">
+            <path d="M 20 20 Q 100 90 180 20" fill="none" stroke="currentColor" stroke-width="3" />
+            <circle cx="100" cy="72" r="4" fill="#F59E0B" />
+          </svg>
+          <span class="absolute bottom-2 right-2 text-[10px] text-slate-500 font-mono">Graphing Calculator v2.4</span>
+        </div>
+      </div>
+      <p class="text-[11px] text-slate-400">Use this reference calculator to test equations and find roots for SAT Math problems.</p>
+    </div>
+  </div>
+
+  <!-- COUNTDOWN CUSTOMIZER MODAL -->
+  <div id="countdown-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border border-purple-500/40 w-full max-w-md rounded-2xl p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-base text-white font-heading flex items-center gap-2">
+          <i class="fa-solid fa-hourglass-half text-purple-400"></i> Test Day Settings
+        </h3>
+        <button onclick="closeCountdownModal()" aria-label="Close Test Day Settings" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      
+      <p class="text-xs text-slate-300 leading-relaxed">
+        Customize your target SAT test date below. The system will track your countdown dynamically!
+      </p>
+
+      <div class="space-y-2">
+        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Target Test Date & Time</label>
+        <input type="datetime-local" id="target-date-input" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-white focus:border-purple-500 focus:outline-none">
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-2">
+        <button onclick="closeCountdownModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold hover:bg-slate-700">Cancel</button>
+        <button onclick="saveCustomCountdown()" class="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold shadow-md shadow-purple-600/30">Save Target Date</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- API Client Layer -->
+  <script src="api.js"></script>
+
+  <!-- App Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
