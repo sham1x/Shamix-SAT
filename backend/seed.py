@@ -48,7 +48,7 @@ def seed_database():
                 "duration_sec": 1080,
                 "duration_str": "18 mins",
                 "order": 1,
-                "video_url": "https://www.w3schools.com/html/mov_bbb.mp4",
+                "video_url": "/assets/demo-lesson.mp4",
                 "description": "Master system of linear equations, standard vs slope-intercept form, parallel/perpendicular lines, and SAT speed tricks.",
                 "materials": {
                     "keyTakeaways": [
@@ -74,7 +74,7 @@ def seed_database():
                 "duration_sec": 1320,
                 "duration_str": "22 mins",
                 "order": 2,
-                "video_url": "https://www.w3schools.com/html/mov_bbb.mp4",
+                "video_url": "/assets/demo-lesson.mp4",
                 "description": "Learn how to analyze author's tone, text structure, function of highlighted sentences, and vocabulary in context.",
                 "materials": {
                     "keyTakeaways": [
@@ -97,7 +97,7 @@ def seed_database():
                 "duration_sec": 1500,
                 "duration_str": "25 mins",
                 "order": 3,
-                "video_url": "https://www.w3schools.com/html/mov_bbb.mp4",
+                "video_url": "/assets/demo-lesson.mp4",
                 "description": "Master circle equations (x-h)² + (y-k)² = r², arc length ratios, radian conversions, and inscribed angle theorems.",
                 "materials": {
                     "keyTakeaways": [
@@ -113,12 +113,15 @@ def seed_database():
             }
         ]
         for l in lessons_data:
-            if not db.query(Lesson).filter(Lesson.id == l["id"]).first():
+            existing_l = db.query(Lesson).filter(Lesson.id == l["id"]).first()
+            if not existing_l:
                 db.add(Lesson(
                     id=l["id"], title=l["title"], subject=l["subject"], module=l["module"],
                     duration_sec=l["duration_sec"], duration_str=l["duration_str"], order=l["order"],
                     video_url=l["video_url"], description=l["description"], materials=l["materials"]
                 ))
+            else:
+                existing_l.video_url = "/assets/demo-lesson.mp4"
 
         # 3. SEED HOMEWORK & QUESTIONS
         homeworks_data = [
@@ -234,7 +237,7 @@ def seed_database():
 
         # 6. SEED DEMO USER & 12 LEADERBOARD USERS
         demo_users_data = [
-            {"username": "demo", "email": "demo@shamixprep.sat", "display_name": "Alex Stargazer (You)", "xp": 3450, "streak_current": 12, "streak_best": 15},
+            {"username": "demo", "email": "demo@shamixprep.sat", "display_name": "Alex Stargazer", "xp": 3450, "streak_current": 12, "streak_best": 15},
             {"username": "sophia_c", "email": "sophia@shamixprep.sat", "display_name": "Sophia Chen", "xp": 5820, "streak_current": 28, "streak_best": 30},
             {"username": "marcus_v", "email": "marcus@shamixprep.sat", "display_name": "Marcus Vance", "xp": 4210, "streak_current": 19, "streak_best": 22},
             {"username": "emily_t", "email": "emily@shamixprep.sat", "display_name": "Emily Thorne", "xp": 3100, "streak_current": 15, "streak_best": 18},
@@ -252,7 +255,10 @@ def seed_database():
 
         for u_data in demo_users_data:
             user = db.query(User).filter(User.username == u_data["username"]).first()
-            if not user:
+            if user:
+                if user.display_name.endswith(" (You)"):
+                    user.display_name = u_data["display_name"]
+            else:
                 password_str = "Demo12345!" if u_data["username"] == "demo" else "Password123!"
                 user = User(
                     username=u_data["username"],
