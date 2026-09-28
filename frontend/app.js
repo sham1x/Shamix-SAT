@@ -224,6 +224,21 @@ async function handleRegisterSubmit(e) {
     errContainer.classList.remove("hidden");
     return;
   }
+  if (!/^[A-Z]/.test(password)) {
+    errText.textContent = "Password must start with an uppercase capital letter (A-Z).";
+    errContainer.classList.remove("hidden");
+    return;
+  }
+  if (!/\d/.test(password)) {
+    errText.textContent = "Password must contain at least one number (0-9).";
+    errContainer.classList.remove("hidden");
+    return;
+  }
+  if (!/[^A-Za-z0-9]/.test(password)) {
+    errText.textContent = "Password must contain at least one special character/symbol (!@#$%^&*).";
+    errContainer.classList.remove("hidden");
+    return;
+  }
 
   errContainer.classList.add("hidden");
   submitBtn.disabled = true;

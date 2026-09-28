@@ -34,6 +34,21 @@ def register_user(request: Request, payload: UserRegisterSchema, db: Session = D
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Password must be at least 8 characters long"
         )
+    if not payload.password[0].isupper():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password must start with a capital letter (A-Z)"
+        )
+    if not any(c.isdigit() for c in payload.password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password must contain at least one number"
+        )
+    if not any(not c.isalnum() for c in payload.password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password must contain at least one special symbol (!@#$%^&*)"
+        )
 
     # Check existing username
     if db.query(User).filter(User.username == payload.username).first():

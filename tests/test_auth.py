@@ -32,6 +32,25 @@ def test_register_short_password(client):
     })
     assert resp.status_code == 422 or resp.status_code == 400
 
+def test_register_password_complexity_rules(client):
+    # 1. Reject missing uppercase first letter
+    resp1 = client.post("/api/auth/register", json={
+        "username": "user1", "email": "user1@shamixprep.sat", "password": "password123!"
+    })
+    assert resp1.status_code in [400, 422]
+
+    # 2. Reject missing digit/number
+    resp2 = client.post("/api/auth/register", json={
+        "username": "user2", "email": "user2@shamixprep.sat", "password": "Password!"
+    })
+    assert resp2.status_code in [400, 422]
+
+    # 3. Reject missing special character/symbol
+    resp3 = client.post("/api/auth/register", json={
+        "username": "user3", "email": "user3@shamixprep.sat", "password": "Password123"
+    })
+    assert resp3.status_code in [400, 422]
+
 def test_login_wrong_password(client):
     resp = client.post("/api/auth/login", json={
         "username": "testdemo",

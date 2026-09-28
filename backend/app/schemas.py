@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import List, Optional, Any, Dict
-from pydantic import BaseModel, EmailStr, Field, ConfigDict
+from pydantic import BaseModel, EmailStr, Field, ConfigDict, field_validator
 
 # Auth Schemas
 class UserRegisterSchema(BaseModel):
@@ -8,6 +8,19 @@ class UserRegisterSchema(BaseModel):
     email: EmailStr
     password: str = Field(..., min_length=8, max_length=100)
     display_name: Optional[str] = None
+
+    @field_validator("password")
+    @classmethod
+    def validate_password_complexity(cls, v: str) -> str:
+        if len(v) < 8:
+            raise ValueError("Password must be at least 8 characters long")
+        if not v[0].isupper():
+            raise ValueError("Password must start with a capital letter (A-Z)")
+        if not any(c.isdigit() for c in v):
+            raise ValueError("Password must contain at least one number")
+        if not any(not c.isalnum() for c in v):
+            raise ValueError("Password must contain at least one special symbol (!@#$%^&*)")
+        return v
 
 class UserLoginSchema(BaseModel):
     username: str
